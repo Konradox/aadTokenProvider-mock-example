@@ -28,7 +28,7 @@ describe("TokenProvider", () => {
 
 	test("Should throw error with errorCode = invalid_resource when resource is unavailable", async () => {
 		const tokenProvider = new TokenProvider(mockContext as any);
-        (Log.error as jest.Mock).mockImplementation((source, error) => {
+		(Log.error as jest.Mock).mockImplementation((source, error) => {
 			assert.equal(source, "TokenProvider");
 			assert.equal(error.errorCode, "invalid_resource");
 		});
@@ -40,28 +40,28 @@ describe("TokenProvider", () => {
 		}
 	});
 
-    test("Should throw custom error", async () => {
-        mockContext.aadTokenProviderFactory.aadTokenProviderMock.registerError("https://fabricated.service.microsoft.com", {
-            errorCode: "custom_error",
-            errorMessage: "Custom error message",
-            message: "Custom error message",
-            name: "Custom error name",
-            stack: "Custom error stack",
-        });
-        const tokenProvider = new TokenProvider(mockContext as any);
-        (Log.error as jest.Mock).mockImplementation((source, error) => {
-            assert.equal(source, "TokenProvider");
-            assert.equal(error.errorCode, "custom_error");
-            assert.equal(error.errorMessage, "Custom error message");
-            assert.equal(error.message, "Custom error message");
-            assert.equal(error.name, "Custom error name");
-            assert.equal(error.stack, "Custom error stack");
-        });
-        try {
-            await tokenProvider.getToken("https://fabricated.service.microsoft.com");
-            assert.fail("Should throw error");
-        } catch (error) {
-            assert.equal(error.errorCode, "custom_error");
-        }
-    });
+	test("Should throw custom error", async () => {
+		mockContext.aadTokenProviderFactory.aadTokenProviderMock.registerError("https://fabricated.service.microsoft.com", {
+			errorCode: "custom_error",
+			errorMessage: "Custom error message",
+			message: "Custom error message",
+			name: "Custom error name",
+			stack: "Custom error stack",
+		});
+		const tokenProvider = new TokenProvider(mockContext as any);
+		(Log.error as jest.Mock).mockImplementation((source, error) => {
+			assert.equal(source, "TokenProvider");
+			assert.equal(error.errorCode, "custom_error");
+			assert.equal(error.errorMessage, "Custom error message");
+			assert.equal(error.message, "Custom error message");
+			assert.equal(error.name, "Custom error name");
+			assert.equal(error.stack, "Custom error stack");
+		});
+		try {
+			await tokenProvider.getToken("https://fabricated.service.microsoft.com");
+			assert.fail("Should throw error");
+		} catch (error) {
+			assert.equal(error.errorCode, "custom_error");
+		}
+	});
 });
